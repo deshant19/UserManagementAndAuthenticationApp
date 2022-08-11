@@ -1,0 +1,10 @@
+version: '3'
+services:
+
+  mongo:
+    image: mongo
+    container_name: 'user-mongo'
+    environment:
+      - MONGO_INITDB_DATABASE=user-mongo
+    ports:
+      - '27017-27019:27017-27019'
