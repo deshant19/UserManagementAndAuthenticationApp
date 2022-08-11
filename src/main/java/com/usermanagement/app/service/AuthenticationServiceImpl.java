@@ -1,5 +1,6 @@
 package com.usermanagement.app.service;
 
+import java.time.Instant;
 import java.util.Base64;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String decodedPassword = new String(decodedBytePassword);
         
         if(user.getEmail().equals(email) && decodedPassword.equals(password)) {
+            
+         // Here user is trying to login and hence login time changes.
+            user.setLoginTime(Instant.now());
+            userRepository.save(user);
+            
         	return true;
         } else {
         	return false;
