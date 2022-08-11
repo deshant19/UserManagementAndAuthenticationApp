@@ -16,15 +16,6 @@ public class User {
 	private Instant loginTime;
 	
 	
-	
-	public User(String userId, String name, String email, String password, Instant loginTime) {
-		this.userId = userId;
-		this.name = name;
-		this.email = email;
-		this.password = password;
-		this.loginTime = loginTime;
-	}
-	
 	public String getUserId() {
 		return userId;
 	}

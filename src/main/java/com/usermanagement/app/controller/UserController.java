@@ -1,5 +1,7 @@
 package com.usermanagement.app.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,30 +28,45 @@ public class UserController {
 
     @PostMapping(path = "/add")
     public ResponseEntity<User> addUser(@RequestBody User user) {
+    	if (null == user.getName() || null == user.getPassword() || null == user.getEmail()) {
+            throw new IllegalArgumentException("User Name, email or password must not be null");
+        } 
+    	
         User userData = userService.addUser(user);
         return ResponseEntity.ok(userData);
     }
 
-    @PostMapping(path = "/update")
+    @PutMapping(path = "/update")
     public ResponseEntity<User> updateUser(@RequestBody  User user) {
+    	if (null == user.getUserId() || null == user.getName() || null == user.getPassword() || null == user.getEmail()) {
+            throw new IllegalArgumentException("User Id,  Name, email or password must not be null");
+        } 
+    	
         User userData = userService.updateUser(user);
         return ResponseEntity.ok(userData);
     }
 
-    @DeleteMapping(path = "/{name}/delete")
-    public void deleteUser(@PathVariable(name = "name") String name) {
-        userService.deleteUser(name);
+    @DeleteMapping(path = "/{userId}/delete")
+    public ResponseEntity<String> deleteUser(@PathVariable(name = "userId") String userId) {
+        userService.deleteUser(userId);
+        return new ResponseEntity<String>("User Id: " + userId + " deleted.", HttpStatus.OK);
     }
 
-    @GetMapping(path = "/{name}")
-    public ResponseEntity<User> getUser(@PathVariable(name = "name") String name) {
-        User user = userService.getUserByName(name);
+    @GetMapping(path = "/{userId}")
+    public ResponseEntity<User> getUser(@PathVariable(name = "userId") String userId) {
+        User user = userService.getUserById(userId);
         return ResponseEntity.ok(user);
+    }
+    
+    @GetMapping(path = "/{name}")
+    public ResponseEntity<List<User>> getUserByName(@PathVariable(name = "name") String name) {
+        List<User> users = userService.getUserByName(name);
+        return ResponseEntity.ok(users);
     }
 
     @GetMapping(path = "/all")
-    public ResponseEntity<User> getUsers() {
-        User users = userService.getAllUsers();
+    public ResponseEntity<List<User>> getUsers() {
+        List<User> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
     

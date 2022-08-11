@@ -1,5 +1,7 @@
 package com.usermanagement.app.service;
 
+import java.util.List;
+
 import com.usermanagement.app.model.User;
 
 public interface UserService {
@@ -8,10 +10,12 @@ public interface UserService {
 
 	User updateUser(User user);
 
-    void deleteUser(String name);
+    void deleteUser(String userId);
 
-    User getUserByName(String name);
+    User getUserById(String userId);
+    
+    List<User> getUserByName(String name);
 
-    User getAllUsers();
+    List<User> getAllUsers();
 
 }
