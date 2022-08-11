@@ -4,9 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.usermanagement.app.model.User;
 import com.usermanagement.app.service.AuthenticationService;
 
 @RestController
@@ -17,12 +19,16 @@ public class AuthenticationController {
     private AuthenticationService authenticationService;
 
 	@PostMapping(path = "/authenticate")
-    public ResponseEntity<String> authenticateUser(String email, String password) {
-        
-        if(authenticationService.authenticateUser(email, password)) {
-        	return new ResponseEntity<String>("Login Successfull", HttpStatus.OK);
+    public ResponseEntity<String> authenticateUser(@RequestBody User user) {
+		
+		if (null == user.getPassword() || null == user.getEmail()) {
+            throw new IllegalArgumentException("User email or password must not be null");
+        } 
+    	
+        if(authenticationService.authenticateUser(user.getEmail(), user.getPassword())) {
+        	return new ResponseEntity<String>("Login Successful.", HttpStatus.OK);
         } else {
-        	return new ResponseEntity<String>("Unable to login. Wrong email or password.", HttpStatus.OK);
+        	return new ResponseEntity<String>("Unable to login. Wrong password.", HttpStatus.OK);
         }
     }
 }

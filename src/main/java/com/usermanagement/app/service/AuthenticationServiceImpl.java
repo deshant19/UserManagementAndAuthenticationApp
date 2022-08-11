@@ -18,13 +18,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	@Override
 	public boolean authenticateUser(String email, String password) {
 		
-		if (email == null || password == null) {
-            throw new IllegalArgumentException("Email or password must not be null.");
-        }
-
         User user = userRepository.findItemByEmail(email);
-        if (user.equals(null)) {
-            throw new ResourceNotFoundException("User not found");
+        if (null == user) {
+            throw new ResourceNotFoundException("User with email not found.");
         }
         
         byte[] decodedBytePassword = Base64.getDecoder().decode(user.getPassword());

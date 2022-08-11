@@ -69,6 +69,21 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.deleteById(userId);
 	}
+	
+	@Override
+	public void deleteUserByName(String name) {
+		
+		if (name == null) {
+            throw new IllegalArgumentException("User name must not be null");
+        }
+
+        List<User> userList = userRepository.findItemByName(name);
+        if (userList.isEmpty()) {
+            throw new ResourceNotFoundException("User not found");
+        }
+        
+        userRepository.deleteAll(userList);
+	}
 
 	@Override
 	public User getUserById(String userId) {

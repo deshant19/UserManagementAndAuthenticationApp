@@ -50,6 +50,12 @@ public class UserController {
         userService.deleteUser(userId);
         return new ResponseEntity<String>("User Id: " + userId + " deleted.", HttpStatus.OK);
     }
+    
+    @DeleteMapping(path = "/name/{name}/delete")
+    public ResponseEntity<String> deleteUserByName(@PathVariable(name = "name") String name) {
+        userService.deleteUserByName(name);
+        return new ResponseEntity<String>("User Name: " + name + " deleted.", HttpStatus.OK);
+    }
 
     @GetMapping(path = "/{userId}")
     public ResponseEntity<User> getUser(@PathVariable(name = "userId") String userId) {
@@ -57,7 +63,7 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
     
-    @GetMapping(path = "/{name}")
+    @GetMapping(path = "/name/{name}")
     public ResponseEntity<List<User>> getUserByName(@PathVariable(name = "name") String name) {
         List<User> users = userService.getUserByName(name);
         return ResponseEntity.ok(users);
