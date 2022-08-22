@@ -29,7 +29,7 @@ public class AuthenticationController {
         if(authenticationService.authenticateUser(user.getEmail(), user.getPassword())) {
         	return new ResponseEntity<String>("Login Successful.", HttpStatus.OK);
         } else {
-        	return new ResponseEntity<String>("Unable to login. Wrong password.", HttpStatus.OK);
+        	return new ResponseEntity<String>("Unable to login. Wrong password.", HttpStatus.UNAUTHORIZED);
         }
     }
 }
