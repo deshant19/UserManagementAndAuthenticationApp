@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.usermanagement.app.handler.UserHelper;
 import com.usermanagement.app.model.User;
 import com.usermanagement.app.service.UserService;
 
@@ -27,8 +29,8 @@ public class UserController {
 
     @PostMapping(path = "/add")
     public ResponseEntity<?> addUser(@RequestBody User user) {
-    	if (null == user.getName() || null == user.getPassword() || null == user.getEmail()) {
-    		return new ResponseEntity<String>("User Name, email or password must not be null", HttpStatus.BAD_REQUEST);
+    	if (UserHelper.isNullOrBlank(user.getName()) || UserHelper.isNullOrBlank(user.getPassword()) || UserHelper.isNullOrBlank(user.getEmail())) {
+    		return new ResponseEntity<String>("User Name, email or password must not be blank.", HttpStatus.BAD_REQUEST);
         } 
     	
     	if(userService.emailExists(user.getEmail())) {
@@ -41,8 +43,9 @@ public class UserController {
 
     @PutMapping(path = "/update")
     public ResponseEntity<?> updateUser(@RequestBody  User user) {
-    	if (null == user.getUserId() || null == user.getName() || null == user.getPassword() || null == user.getEmail()) {
-    		return new ResponseEntity<String>("User Id,  Name, email or password must not be null", HttpStatus.BAD_REQUEST);
+    	if (UserHelper.isNullOrBlank(user.getUserId()) || UserHelper.isNullOrBlank(user.getName()) || 
+    			UserHelper.isNullOrBlank(user.getPassword()) || UserHelper.isNullOrBlank(user.getEmail())) {
+    		return new ResponseEntity<String>("User Id,  Name, email or password must not be blank.", HttpStatus.BAD_REQUEST);
         } 
     	
     	if(userService.emailExists(user.getEmail())) {

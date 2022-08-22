@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.usermanagement.app.handler.UserHelper;
 import com.usermanagement.app.model.User;
 import com.usermanagement.app.service.AuthenticationService;
 
@@ -21,8 +22,8 @@ public class AuthenticationController {
 	@PostMapping(path = "/authenticate")
     public ResponseEntity<String> authenticateUser(@RequestBody User user) {
 		
-		if (null == user.getPassword() || null == user.getEmail()) {
-            throw new IllegalArgumentException("User email or password must not be null");
+		if (UserHelper.isNullOrBlank(user.getPassword()) || UserHelper.isNullOrBlank(user.getEmail())) {
+            throw new IllegalArgumentException("User email or password must not be blank.");
         } 
     	
         if(authenticationService.authenticateUser(user.getEmail(), user.getPassword())) {
