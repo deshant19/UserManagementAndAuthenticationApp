@@ -131,4 +131,17 @@ public class UserServiceImpl implements UserService {
         return userList;
 	}
 
+	@Override
+	public boolean emailExists(String email) {
+		// TODO Auto-generated method stub
+		List<User> users = userRepository.findAll();
+		for (User user: users) {
+            // Checks if the user email is equal to the email parameter
+            if (user.getEmail().equals(email)) {
+                return true;
+            }
+        }
+		return false;
+	}
+
 }

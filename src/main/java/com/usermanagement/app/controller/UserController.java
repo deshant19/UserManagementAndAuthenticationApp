@@ -26,20 +26,28 @@ public class UserController {
     private UserService userService;
 
     @PostMapping(path = "/add")
-    public ResponseEntity<User> addUser(@RequestBody User user) {
+    public ResponseEntity<?> addUser(@RequestBody User user) {
     	if (null == user.getName() || null == user.getPassword() || null == user.getEmail()) {
-            throw new IllegalArgumentException("User Name, email or password must not be null");
+    		return new ResponseEntity<String>("User Name, email or password must not be null", HttpStatus.BAD_REQUEST);
         } 
+    	
+    	if(userService.emailExists(user.getEmail())) {
+    		return new ResponseEntity<String>("Email already exists.", HttpStatus.CONFLICT);
+    	}
     	
         User userData = userService.addUser(user);
         return ResponseEntity.ok(userData);
     }
 
     @PutMapping(path = "/update")
-    public ResponseEntity<User> updateUser(@RequestBody  User user) {
+    public ResponseEntity<?> updateUser(@RequestBody  User user) {
     	if (null == user.getUserId() || null == user.getName() || null == user.getPassword() || null == user.getEmail()) {
-            throw new IllegalArgumentException("User Id,  Name, email or password must not be null");
+    		return new ResponseEntity<String>("User Id,  Name, email or password must not be null", HttpStatus.BAD_REQUEST);
         } 
+    	
+    	if(userService.emailExists(user.getEmail())) {
+    		return new ResponseEntity<String>("Email already exists.", HttpStatus.CONFLICT);
+    	}
     	
         User userData = userService.updateUser(user);
         return ResponseEntity.ok(userData);
@@ -77,7 +85,7 @@ public class UserController {
     
     @RequestMapping (value = "/**", method = {RequestMethod.GET, RequestMethod.POST})
 	public ResponseEntity<String> wrongPathResponseHandler() {
-	    return new ResponseEntity<String>("Wrong request. To get all users try to append /all after user in URL.", HttpStatus.OK);
+	    return new ResponseEntity<String>("Wrong request. To get all users try to append /all after user in URL.", HttpStatus.BAD_REQUEST);
 	}
 
 }
